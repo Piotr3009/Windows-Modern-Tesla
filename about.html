@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Sash Studio - Premium timber sash window craftsmen in London. Learn about our heritage, craftsmanship, and commitment to quality.">
+
+  <title>About Us - Sash Studio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    body { font-family: 'Inter', var(--font-sans); }
+
+    .about-page {
+      padding-top: 72px;
+    }
+
+    .about-hero {
+      padding: 100px 24px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .about-hero h1 {
+      margin-bottom: 24px;
+    }
+
+    .about-hero p {
+      font-size: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .about-section {
+      padding: 100px 24px;
+    }
+
+    .about-section:nth-child(even) {
+      background: var(--bg-secondary);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .about-grid.reverse {
+      direction: rtl;
+    }
+
+    .about-grid.reverse > * {
+      direction: ltr;
+    }
+
+    .about-content h2 {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+
+    .about-content p {
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .about-image {
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--border-light) 100%);
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-image svg {
+      width: 120px;
+      height: 120px;
+      opacity: 0.3;
+    }
+
+    .values-section {
+      padding: 100px 24px;
+      background: var(--text-primary);
+    }
+
+    .values-section .section-header h2 {
+      color: white;
+    }
+
+    .values-section .section-header p {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .value-card {
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .value-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      background: rgba(255,255,255,0.1);
+      border-radius: var(--radius-lg);
+    }
+
+    .value-icon svg {
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
+
+    .value-card h3 {
+      color: white;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .value-card p {
+      color: rgba(255,255,255,0.7);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .stats-section {
+      padding: 80px 24px;
+      background: var(--bg-secondary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .stat-item {
+      padding: 24px;
+    }
+
+    .stat-number {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .certifications {
+      padding: 80px 24px;
+    }
+
+    .cert-grid {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin: 48px auto 0;
+    }
+
+    .cert-item {
+      width: 120px;
+      height: 80px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 1024px) {
+      .values-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .about-grid.reverse {
+        direction: ltr;
+      }
+
+      .values-grid,
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stat-number {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">Sash<span>Studio</span></a>
+
+      <ul class="navbar-menu">
+        <li><a href="configurator.html">Configure</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#gallery">Gallery</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="navbar-actions">
+        <a href="configurator.html" class="btn btn-primary">Start Designing</a>
+      </div>
+
+      <button class="mobile-menu-toggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="about-page">
+    <!-- Hero -->
+    <section class="about-hero">
+      <div class="container">
+        <h1 class="animate-fade-in-up">Crafting Windows Since 1985</h1>
+        <p class="animate-fade-in-up stagger-1">For over three decades, we've been creating beautiful timber sash windows that enhance London's finest homes.</p>
+      </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="about-section">
+      <div class="about-grid">
+        <div class="about-content reveal">
+          <h2>Our Story</h2>
+          <p>Sash Studio was founded with a simple mission: to preserve the beauty of traditional sash windows while embracing modern performance standards.</p>
+          <p>What started as a small workshop in North London has grown into one of the capital's most trusted window manufacturers, serving homeowners, architects, and developers across the city.</p>
+          <p>We combine time-honoured joinery techniques with precision engineering to create windows that are as beautiful as they are functional.</p>
+        </div>
+        <div class="about-image reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <line x1="12" y1="3" x2="12" y2="21"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Workshop -->
+    <section class="about-section">
+      <div class="about-grid reverse">
+        <div class="about-content reveal">
+          <h2>Our Workshop</h2>
+          <p>Every Sash Studio window is crafted in our state-of-the-art workshop in London. Here, traditional skills meet modern precision.</p>
+          <p>Our craftsmen undergo years of training, learning the art of traditional joinery before mastering our advanced manufacturing processes.</p>
+          <p>We use only the finest materials: sustainable timber from managed forests, premium glazing units, and hardware from respected British manufacturers.</p>
+        </div>
+        <div class="about-image reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Approach -->
+    <section class="about-section">
+      <div class="about-grid">
+        <div class="about-content reveal">
+          <h2>Our Approach</h2>
+          <p>We believe that buying windows should be as enjoyable as the finished result. That's why we've developed our online configurator.</p>
+          <p>Design your perfect window from the comfort of your home, get instant pricing, and receive expert support throughout your project.</p>
+          <p>From initial design to installation, we're with you every step of the way. Our team of experts is always available to answer questions and provide guidance.</p>
+        </div>
+        <div class="about-image reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Values -->
+    <section class="values-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Our Values</h2>
+          <p>The principles that guide everything we do.</p>
+        </div>
+
+        <div class="values-grid">
+          <div class="value-card reveal">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3>Quality</h3>
+            <p>We never compromise on materials or craftsmanship. Every window meets our exacting standards.</p>
+          </div>
+
+          <div class="value-card reveal">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3>Service</h3>
+            <p>Our customers are at the heart of everything we do. We're here to help at every stage.</p>
+          </div>
+
+          <div class="value-card reveal">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+                <circle cx="12" cy="12" r="4"/>
+              </svg>
+            </div>
+            <h3>Sustainability</h3>
+            <p>We source timber responsibly and build windows that last generations, reducing waste.</p>
+          </div>
+
+          <div class="value-card reveal">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <h3>Innovation</h3>
+            <p>Traditional methods, modern technology. We're always looking for better ways to serve you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <div class="stat-number">35+</div>
+          <div class="stat-label">Years of Experience</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-number">10k+</div>
+          <div class="stat-label">Windows Installed</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-item reveal">
+          <div class="stat-number">25</div>
+          <div class="stat-label">Expert Craftsmen</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="certifications">
+      <div class="container">
+        <div class="section-header">
+          <h2>Certifications & Memberships</h2>
+          <p>Accredited by industry leading bodies.</p>
+        </div>
+
+        <div class="cert-grid">
+          <div class="cert-item reveal">FENSA</div>
+          <div class="cert-item reveal">PAS24</div>
+          <div class="cert-item reveal">BWF</div>
+          <div class="cert-item reveal">FSC</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2>Ready to Start Your Project?</h2>
+        <p>Design your perfect windows online or get in touch with our team.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+          <a href="configurator.html" class="btn btn-primary btn-lg">Start Configuring</a>
+          <a href="contact.html" class="btn btn-outline btn-lg" style="border-color: rgba(255,255,255,0.3); color: white;">Contact Us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="navbar-logo">Sash<span>Studio</span></a>
+          <p>Premium timber sash windows, handcrafted in London. Traditional craftsmanship meets modern precision.</p>
+        </div>
+
+        <div class="footer-column">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="configurator.html">Window Configurator</a></li>
+            <li><a href="#">Sash Windows</a></li>
+            <li><a href="#">Casement Windows</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Measurement Guide</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2024 Sash Studio. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/animations.js"></script>
+</body>
+</html>
