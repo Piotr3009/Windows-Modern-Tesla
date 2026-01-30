@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Configure your perfect timber sash window. Choose size, style, glass, and finish with real-time pricing.">
+
+  <title>Window Configurator - Sash Studio</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/configurator.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    body { font-family: 'Inter', var(--font-sans); }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">Sash<span>Studio</span></a>
+
+      <ul class="navbar-menu">
+        <li><a href="configurator.html" class="active">Configure</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="index.html#gallery">Gallery</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="navbar-actions">
+        <button class="btn btn-secondary" id="loginBtn">Sign In</button>
+      </div>
+
+      <button class="mobile-menu-toggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Configurator Page -->
+  <main class="configurator-page">
+    <div class="configurator-container">
+      <!-- Header -->
+      <div class="configurator-header animate-fade-in-up">
+        <h1>Traditional Sash Window</h1>
+        <p>Configure your perfect window with real-time pricing</p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="configurator-main">
+        <!-- Window Preview Section -->
+        <section class="window-preview-section animate-fade-in">
+          <div class="window-preview-wrapper" id="windowPreviewWrapper">
+            <div class="window-preview" id="windowPreview">
+              <!-- Dynamic SVG Window will be rendered here -->
+              <svg id="windowSVG" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Window Frame -->
+                <rect id="frameOuter" x="20" y="20" width="260" height="360" rx="4" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="8"/>
+
+                <!-- Frame Inner Shadow/Border -->
+                <rect x="20" y="20" width="260" height="360" rx="4" fill="none" stroke="#1D1D1F" stroke-width="2" stroke-opacity="0.1"/>
+
+                <!-- Upper Sash Background -->
+                <rect id="upperSashBg" x="32" y="32" width="236" height="168" rx="2" fill="#E8F4FD"/>
+
+                <!-- Upper Sash Frame -->
+                <rect id="upperSashFrame" x="32" y="32" width="236" height="168" rx="2" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+
+                <!-- Upper Glazing Bars Container -->
+                <g id="upperBars" stroke="#FFFFFF" stroke-width="3">
+                  <!-- Bars will be dynamically added based on style -->
+                </g>
+
+                <!-- Lower Sash Background -->
+                <rect id="lowerSashBg" x="32" y="200" width="236" height="168" rx="2" fill="#E8F4FD"/>
+
+                <!-- Lower Sash Frame -->
+                <rect id="lowerSashFrame" x="32" y="200" width="236" height="168" rx="2" fill="none" stroke="#FFFFFF" stroke-width="4"/>
+
+                <!-- Lower Glazing Bars Container -->
+                <g id="lowerBars" stroke="#FFFFFF" stroke-width="3">
+                  <!-- Bars will be dynamically added based on style -->
+                </g>
+
+                <!-- Meeting Rail -->
+                <rect id="meetingRail" x="28" y="192" width="244" height="16" fill="#FFFFFF"/>
+                <rect x="28" y="192" width="244" height="16" fill="none" stroke="#1D1D1F" stroke-width="1" stroke-opacity="0.1"/>
+
+                <!-- Hardware - Lock -->
+                <circle id="hardwareLock" cx="150" cy="200" r="8" fill="#D4A84B"/>
+
+                <!-- Glass Reflections -->
+                <path class="glass-reflection" d="M40 40 L80 40 L40 100 Z" fill="rgba(255,255,255,0.4)"/>
+                <path class="glass-reflection" d="M40 208 L80 208 L40 268 Z" fill="rgba(255,255,255,0.4)"/>
+
+                <!-- Frosted Glass Overlay (hidden by default) -->
+                <rect id="frostedOverlay" x="32" y="32" width="236" height="336" fill="url(#frostedPattern)" opacity="0" style="pointer-events:none;"/>
+
+                <!-- Frosted pattern definition -->
+                <defs>
+                  <pattern id="frostedPattern" patternUnits="userSpaceOnUse" width="4" height="4">
+                    <rect width="4" height="4" fill="rgba(255,255,255,0.6)"/>
+                    <circle cx="2" cy="2" r="1" fill="rgba(200,200,200,0.3)"/>
+                  </pattern>
+                </defs>
+              </svg>
+            </div>
+
+            <!-- Dimension Labels -->
+            <div class="window-dimensions width-label" id="widthLabel">900mm</div>
+            <div class="window-dimensions height-label" id="heightLabel">1200mm</div>
+          </div>
+
+          <!-- View Controls -->
+          <div class="view-controls">
+            <button class="view-btn active" data-view="front">Front</button>
+            <button class="view-btn" data-view="detail">Detail</button>
+          </div>
+        </section>
+
+        <!-- Options Section -->
+        <section class="options-section">
+          <!-- Size -->
+          <div class="option-group animate-fade-in-up stagger-1">
+            <h3>Size</h3>
+            <div class="option-content">
+              <div class="size-control">
+                <div class="size-label">
+                  <span>Width</span>
+                  <span class="size-value" id="widthValue">900mm</span>
+                </div>
+                <input type="range" class="range-slider" id="widthSlider" min="400" max="1500" value="900" step="10">
+              </div>
+
+              <div class="size-control">
+                <div class="size-label">
+                  <span>Height</span>
+                  <span class="size-value" id="heightValue">1200mm</span>
+                </div>
+                <input type="range" class="range-slider" id="heightSlider" min="600" max="2400" value="1200" step="10">
+              </div>
+
+              <!-- Quantity -->
+              <div class="size-label mt-3">
+                <span>Quantity</span>
+              </div>
+              <div class="quantity-selector">
+                <button class="qty-btn" id="qtyMinus">-</button>
+                <span class="qty-value" id="qtyValue">1</span>
+                <button class="qty-btn" id="qtyPlus">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Style -->
+          <div class="option-group animate-fade-in-up stagger-2">
+            <h3>Style</h3>
+            <div class="option-content">
+              <div class="style-options">
+                <div class="style-option active" data-style="1over1" title="1 over 1">
+                  <svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="5" width="50" height="70" rx="2"/>
+                    <line x1="5" y1="40" x2="55" y2="40"/>
+                  </svg>
+                  <span class="style-option-label">1 over 1</span>
+                </div>
+
+                <div class="style-option" data-style="2over2" title="2 over 2">
+                  <svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="5" width="50" height="70" rx="2"/>
+                    <line x1="30" y1="5" x2="30" y2="40"/>
+                    <line x1="5" y1="40" x2="55" y2="40"/>
+                    <line x1="30" y1="40" x2="30" y2="75"/>
+                  </svg>
+                  <span class="style-option-label">2 over 2</span>
+                </div>
+
+                <div class="style-option" data-style="6over6" title="6 over 6 Georgian">
+                  <svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="5" width="50" height="70" rx="2"/>
+                    <line x1="22" y1="5" x2="22" y2="40"/>
+                    <line x1="38" y1="5" x2="38" y2="40"/>
+                    <line x1="5" y1="17" x2="55" y2="17"/>
+                    <line x1="5" y1="29" x2="55" y2="29"/>
+                    <line x1="5" y1="40" x2="55" y2="40"/>
+                    <line x1="22" y1="40" x2="22" y2="75"/>
+                    <line x1="38" y1="40" x2="38" y2="75"/>
+                    <line x1="5" y1="52" x2="55" y2="52"/>
+                    <line x1="5" y1="64" x2="55" y2="64"/>
+                  </svg>
+                  <span class="style-option-label">6 over 6</span>
+                </div>
+
+                <div class="style-option" data-style="4over4" title="4 over 4">
+                  <svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="5" y="5" width="50" height="70" rx="2"/>
+                    <line x1="30" y1="5" x2="30" y2="40"/>
+                    <line x1="5" y1="22" x2="55" y2="22"/>
+                    <line x1="5" y1="40" x2="55" y2="40"/>
+                    <line x1="30" y1="40" x2="30" y2="75"/>
+                    <line x1="5" y1="58" x2="55" y2="58"/>
+                  </svg>
+                  <span class="style-option-label">4 over 4</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Glass -->
+          <div class="option-group animate-fade-in-up stagger-3">
+            <h3>Glass</h3>
+            <div class="option-content">
+              <div class="glass-options">
+                <div class="glass-option active" data-glass="double">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Double Glazed</span>
+                    <span class="glass-option-desc">Standard insulation</span>
+                  </div>
+                  <span class="glass-option-price">Included</span>
+                </div>
+
+                <div class="glass-option" data-glass="triple">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Triple Glazed</span>
+                    <span class="glass-option-desc">Premium insulation</span>
+                  </div>
+                  <span class="glass-option-price">+£150</span>
+                </div>
+
+                <div class="glass-option" data-glass="passive">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Passive House</span>
+                    <span class="glass-option-desc">Maximum efficiency</span>
+                  </div>
+                  <span class="glass-option-price">+£250</span>
+                </div>
+              </div>
+
+              <!-- Glass Finish -->
+              <h3 class="mt-3">Finish</h3>
+              <div class="glass-options">
+                <div class="glass-option active" data-finish="clear">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Clear</span>
+                    <span class="glass-option-desc">Standard transparent</span>
+                  </div>
+                  <span class="glass-option-price">Included</span>
+                </div>
+
+                <div class="glass-option" data-finish="frosted">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Frosted</span>
+                    <span class="glass-option-desc">Privacy glass</span>
+                  </div>
+                  <span class="glass-option-price">+£80</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color -->
+          <div class="option-group animate-fade-in-up stagger-4">
+            <h3>Frame Color</h3>
+            <div class="option-content">
+              <div class="color-options">
+                <div class="color-option color-white light active" data-color="white" data-hex="#FFFFFF" title="Pure White"></div>
+                <div class="color-option color-cream light" data-color="cream" data-hex="#FFF8E7" title="Cream"></div>
+                <div class="color-option color-grey" data-color="grey" data-hex="#383E42" title="Anthracite Grey"></div>
+                <div class="color-option color-black" data-color="black" data-hex="#1D1D1F" title="Black"></div>
+                <div class="color-option color-green" data-color="green" data-hex="#2D5A3D" title="Heritage Green"></div>
+                <div class="color-option color-oak" data-color="oak" data-hex="#8B6914" title="Natural Oak"></div>
+              </div>
+              <div class="color-name" id="colorName">Pure White</div>
+            </div>
+          </div>
+
+          <!-- Hardware -->
+          <div class="option-group animate-fade-in-up stagger-5">
+            <h3>Hardware</h3>
+            <div class="option-content">
+              <select class="hardware-select" id="hardwareSelect">
+                <option value="brass" data-hex="#D4A84B">Polished Brass</option>
+                <option value="chrome" data-hex="#C0C0C0">Polished Chrome</option>
+                <option value="satin" data-hex="#A8A8A8">Satin Chrome</option>
+                <option value="black" data-hex="#1D1D1F">Black Antique</option>
+                <option value="bronze" data-hex="#8B5A2B">Heritage Bronze</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Security -->
+          <div class="option-group animate-fade-in-up stagger-6">
+            <h3>Security</h3>
+            <div class="option-content">
+              <div class="security-options">
+                <div class="toggle-option">
+                  <div class="toggle-info">
+                    <span class="toggle-name">PAS24 Certified</span>
+                    <span class="toggle-desc">Enhanced security standard</span>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="pas24Toggle">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-option">
+                  <div class="toggle-info">
+                    <span class="toggle-name">Laminated Glass</span>
+                    <span class="toggle-desc">Extra protection (£30/m²)</span>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="laminatedToggle">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+
+                <div class="toggle-option">
+                  <div class="toggle-info">
+                    <span class="toggle-name">Key-Operated Locks</span>
+                    <span class="toggle-desc">Additional security</span>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="keyLocksToggle">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opening Type -->
+          <div class="option-group animate-fade-in-up stagger-6 extras-card">
+            <h3>Opening Type</h3>
+            <div class="option-content">
+              <div class="glass-options">
+                <div class="glass-option active" data-opening="both">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Both Sashes</span>
+                    <span class="glass-option-desc">Top and bottom open</span>
+                  </div>
+                  <span class="glass-option-price">Standard</span>
+                </div>
+
+                <div class="glass-option" data-opening="bottom">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Bottom Only</span>
+                    <span class="glass-option-desc">Top fixed</span>
+                  </div>
+                  <span class="glass-option-price">-£30</span>
+                </div>
+
+                <div class="glass-option" data-opening="fixed">
+                  <div class="glass-option-info">
+                    <span class="glass-option-name">Fixed</span>
+                    <span class="glass-option-desc">Non-opening</span>
+                  </div>
+                  <span class="glass-option-price">-£50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Pricing Panel (Sticky Footer) -->
+  <div class="pricing-panel animate-slide-up">
+    <div class="pricing-panel-inner">
+      <div class="pricing-summary">
+        <div class="pricing-config">
+          <span class="pricing-config-title">Your Window</span>
+          <span class="pricing-config-details" id="configSummary">900 x 1200mm • 1 over 1 • White</span>
+        </div>
+
+        <div class="pricing-breakdown" id="priceBreakdown">
+          <div class="breakdown-item">
+            <span class="breakdown-label">Base</span>
+            <span class="breakdown-value" id="basePrice">£972</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="breakdown-label">Glass</span>
+            <span class="breakdown-value" id="glassPrice">£0</span>
+          </div>
+          <div class="breakdown-item">
+            <span class="breakdown-label">Options</span>
+            <span class="breakdown-value" id="optionsPrice">£0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-total">
+        <div class="total-price">
+          <div class="total-amount" id="totalPrice">£972</div>
+          <div class="total-label">per window (ex. VAT)</div>
+        </div>
+
+        <button class="quote-btn ripple" id="getQuoteBtn">
+          Get Quote
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/supabase-config.js"></script>
+  <script src="js/pricing.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/configurator.js"></script>
+  <script src="js/animations.js"></script>
+</body>
+</html>

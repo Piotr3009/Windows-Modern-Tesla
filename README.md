@@ -1,247 +1,123 @@
-# Windows Configurator - 3-Column Layout Update
+# Sash Studio - Modern Tesla-Style Window Configurator
 
-## 📋 Opis Projektu
+A premium, minimalist window configurator inspired by Tesla's car configurator design philosophy. Built for a London-based timber sash window company targeting young professionals, builders, and architects.
 
-Konfigurator okien drewnianych Skylon Timber & Glazing z nowym układem 3-kolumnowym, zaprojektowanym dla lepszego wykorzystania przestrzeni ekranu i poprawy user experience.
+## Features
 
-## 🎯 Cel Zmian
+### Tesla-Inspired Design
+- **Clean, minimal interface** - Product-centered design with white/light grey backgrounds
+- **Window "floating" in space** - No room context, pure product focus
+- **Real-time price updates** - Animated price changes as options are selected
+- **Micro-interactions** - Subtle animations for premium feel
 
-Poprzedni layout (2 kolumny) marnował dużo miejsca po bokach na szerokich ekranach. Nowy layout (3 kolumny) maksymalnie wykorzystuje dostępną przestrzeń, zachowując przejrzystość i logiczny flow użytkownika.
+### Window Configurator
+- **Dynamic SVG Visualization** - Window preview updates instantly with:
+  - Frame color changes (White, Cream, Grey, Black, Green, Oak)
+  - Glazing bar patterns (1 over 1, 2 over 2, 4 over 4, 6 over 6)
+  - Glass finish (Clear, Frosted)
+  - Hardware colors (Brass, Chrome, Satin, Black, Bronze)
 
-## 🔄 Zmiany w Layoutcie
+- **Size Configuration**
+  - Width: 400mm - 1500mm
+  - Height: 600mm - 2400mm
+  - Visual scaling to reflect dimensions
 
-### Poprzedni Layout (2 kolumny)
+- **Options**
+  - Glass types: Double, Triple, Passive House
+  - Opening types: Both sashes, Bottom only, Fixed
+  - Security: PAS24, Laminated glass, Key-operated locks
+
+### Pricing Engine
+- Base price per square meter with size multipliers
+- Georgian bars pricing
+- Glass and finish options
+- Quantity discounts (5% for 6+, 10% for 12+, 15% for 24+)
+- Real-time calculation with animated updates
+
+### Supabase Integration
+- Connected to existing Supabase database
+- Load pricing configuration from database
+- Save estimates and quotes
+- User authentication support
+
+## Pages
+
+1. **index.html** - Landing page with hero, features, testimonials
+2. **configurator.html** - Main Tesla-style window configurator
+3. **about.html** - Company story and values
+4. **contact.html** - Contact form and information
+
+## Tech Stack
+
+- **Frontend**: Vanilla JavaScript, CSS3, HTML5
+- **Styling**: CSS Custom Properties, Flexbox, Grid
+- **Database**: Supabase (PostgreSQL)
+- **Fonts**: Inter (Google Fonts)
+- **No frameworks** - Lightweight, fast-loading
+
+## File Structure
+
 ```
-┌─────────────────────────────────────────────────┐
-│  [Wizualizacja + Spec]  │  [Opcje]             │
-│       (550px)           │  (reszta)            │
-│                         │                       │
-└─────────────────────────────────────────────────┘
-Container: 1200px
+/
+├── index.html              # Landing page
+├── configurator.html       # Main configurator
+├── about.html              # About page
+├── contact.html            # Contact page
+├── css/
+│   ├── main.css           # Global styles
+│   ├── configurator.css   # Configurator styles
+│   └── animations.css     # Animation definitions
+├── js/
+│   ├── supabase-config.js # Supabase client setup
+│   ├── pricing.js         # Pricing calculation engine
+│   ├── visualizer.js      # SVG window rendering
+│   ├── configurator.js    # Main configurator logic
+│   └── animations.js      # Animation controller
+└── img/
+    ├── window/            # Window assets (placeholder)
+    └── icons/             # Icon assets
 ```
 
-### Nowy Layout (3 kolumny)
-```
-┌──────────────────────────────────────────────────────┐
-│  [Opcje]  │  [Spec]  │  [Wizualizacja + Cena STICKY] │
-│  (400px)  │  (400px) │         (550px)               │
-│           │          │                               │
-└──────────────────────────────────────────────────────┘
-Container: 1400px
-```
+## Design Tokens
 
-## 📐 Szczegóły Techniczne
-
-### Szerokości Kolumn
-- **Lewa (Opcje)**: 400px - formularze konfiguracji
-- **Środek (Specyfikacja)**: 400px - szczegóły wybranej konfiguracji
-- **Prawa (Wizualizacja + Cena)**: 550px - podgląd okna i cena (STICKY)
-- **Gap**: 25px między kolumnami
-- **Container**: 1400px (zwiększony z 1200px)
-
-### Funkcje
-- ✅ **Sticky Preview**: Wizualizacja i cena zawsze widoczne przy scrollowaniu
-- ✅ **Logiczny Flow**: Opcje → Spec → Wizualizacja (naturalny ruch wzroku)
-- ✅ **Responsive**: Automatyczne przejście na układ kolumnowy na małych ekranach
-- ✅ **Zachowana Grafika**: Canvas wizualizacji (240px) bez zmian - bary się nie rozjadą
-
-## 📝 Zmodyfikowane Pliki
-
-### 1. `css/main.css`
-**Zmiany:**
 ```css
-.container {
-  max-width: 1400px;  /* było: 1200px */
-}
+--bg-primary: #FFFFFF;
+--bg-secondary: #F5F5F7;
+--text-primary: #1D1D1F;
+--text-secondary: #86868B;
+--accent: #0066CC;
+--success: #34C759;
+--border: #D2D2D7;
 ```
 
-### 2. `css/configurator.css`
-**Zmiany:**
-```css
-/* Layout 3 kolumn */
-.configurator-grid {
-  display: flex;
-  gap: 25px;  /* było: 40px */
-  align-items: flex-start;
-}
+## Supabase Tables Used
 
-.configurator-options {
-  flex: 0 0 400px;  /* nowe */
-}
+- `pricing_config` - Pricing configuration
+- `estimates` - Saved quotes
+- `customers` - User accounts
+- `quote_requests` - Anonymous quote requests
 
-.window-specification {
-  flex: 0 0 400px;  /* nowe + style */
-  background-color: var(--white);
-  border: 2px solid var(--secondary-color);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  box-shadow: var(--shadow-md);
-}
+## Browser Support
 
-.configurator-preview {
-  flex: 0 0 550px;
-  position: sticky;  /* nowe */
-  top: 20px;
-  /* ... reszta bez zmian */
-}
+- Chrome 80+
+- Firefox 75+
+- Safari 13+
+- Edge 80+
 
-/* Responsive */
-@media (max-width: 768px) {
-  .configurator-grid {
-    flex-direction: column;
-  }
-  
-  .configurator-options,
-  .window-specification {
-    width: 100%;
-    flex: none;
-  }
-  
-  .configurator-preview {
-    position: relative;
-    top: 0;
-    width: 100%;
-    flex: none;
-  }
-}
-```
+## Getting Started
 
-### 3. `build-your-own-windows.html`
-**Zmiany struktury:**
-```html
-<!-- PRZED -->
-<div class="configurator-grid">
-  <div class="configurator-preview">
-    <div class="svg-window-visualization">...</div>
-    <div class="window-specification">...</div>
-    <div class="price-summary">...</div>
-  </div>
-  <div class="configurator-options">...</div>
-</div>
+1. Clone the repository
+2. Open `index.html` in a browser
+3. Or use a local server: `python -m http.server 8000`
 
-<!-- PO -->
-<div class="configurator-grid">
-  <div class="configurator-options">...</div>
-  <div class="window-specification">...</div>
-  <div class="configurator-preview">
-    <div class="svg-window-visualization">...</div>
-    <div class="price-summary">...</div>
-  </div>
-</div>
-```
+## Credits
 
-## ✅ Testy i Weryfikacja
-
-### Sprawdzone:
-- [x] Struktura HTML (222 opening divs = 222 closing divs)
-- [x] JavaScript nie zależy od kolejności DOM (używa tylko ID)
-- [x] Canvas wizualizacji ma fixed 240px (nie rozjedzie się)
-- [x] Wszystkie ID z JS istnieją w HTML
-- [x] Responsive CSS dla małych ekranów
-- [x] Brak konfliktów w selektorach CSS
-
-### Wymaga Testu w Przeglądarce:
-- [ ] Wyświetlanie 3 kolumn na desktop
-- [ ] Sticky behavior prawej kolumny
-- [ ] Scrollowanie środkowej i lewej kolumny
-- [ ] Aktualizacja ceny w czasie rzeczywistym
-- [ ] Wizualizacja canvas (bary)
-- [ ] Responsive na różnych rozdzielczościach
-
-## 🔧 Instalacja
-
-### Opcja 1: Bezpośrednie Wgranie
-Skopiuj pliki z `/mnt/user-data/outputs/` do katalogu strony:
-```bash
-cp /mnt/user-data/outputs/build-your-own-windows.html ./
-cp /mnt/user-data/outputs/css/main.css ./css/
-cp /mnt/user-data/outputs/css/configurator.css ./css/
-```
-
-### Opcja 2: Git
-```bash
-git pull origin main
-```
-
-## 🔙 Rollback (w razie problemów)
-
-Backup oryginalnego pliku znajduje się w:
-```
-build-your-own-windows.html.backup
-```
-
-Przywracanie:
-```bash
-cp build-your-own-windows.html.backup build-your-own-windows.html
-git checkout HEAD -- css/main.css css/configurator.css
-```
-
-## 🎨 User Experience
-
-### Korzyści Nowego Layoutu:
-1. **Lepsza czytelność** - każda sekcja ma dedykowaną przestrzeń
-2. **Zawsze widoczna cena** - sticky preview eliminuje przewijanie do góry
-3. **Naturalny flow** - od lewej do prawej: konfiguruj → sprawdź spec → zobacz efekt
-4. **Więcej miejsca** - powiększony container (1400px) lepiej wykorzystuje ekran
-
-### Zachowane Funkcjonalności:
-- ✅ Wszystkie formularze konfiguracji
-- ✅ Wizualizacja canvas z barami
-- ✅ Kalkulacja ceny w czasie rzeczywistym
-- ✅ Zapisywanie konfiguracji
-- ✅ Wszystkie przyciski i akcje
-
-## 📊 Kompatybilność
-
-- **Desktop (>1400px)**: Layout 3 kolumn - optymalne doświadczenie
-- **Laptop (1024-1400px)**: Layout 3 kolumn - dopasowany
-- **Tablet (<768px)**: Layout kolumnowy (responsive)
-- **Mobile (<768px)**: Layout kolumnowy (planowany osobny kod dla iPhone)
-
-## 🐛 Znane Ograniczenia
-
-1. **Bardzo małe ekrany (<768px)**: Podstawowy responsive (planowany dedykowany layout mobilny)
-2. **Bardzo duże ekrany (>1600px)**: Puste przestrzenie po bokach (container fixed 1400px)
-
-## 📌 Uwagi dla Developerów
-
-### Canvas Wizualizacji
-**NIE ZMIENIAJ** szerokości `.window-container` (240px) - spowoduje rozjechanie się barów!
-
-### JavaScript
-Wszystkie event handlery działają na ID - kolejność elementów w DOM nie ma znaczenia.
-
-### Sticky Behavior
-Prawa kolumna (preview) ma `position: sticky; top: 20px` - automatycznie przyklejona przy scrollowaniu.
-
-## 📧 Kontakt
-
-W razie problemów lub pytań:
-- GitHub Issues
-- Email: support@skylontimber.com
-
-## 📜 Changelog
-
-### [1.0.0] - 2025-01-XX
-#### Added
-- Layout 3-kolumnowy (Opcje | Spec | Wizualizacja+Cena)
-- Sticky preview (prawa kolumna)
-- Powiększony container do 1400px
-- Responsive CSS dla wszystkich kolumn
-
-#### Changed
-- Struktura HTML: przeniesiona specyfikacja do osobnej kolumny
-- Gap między kolumnami: 40px → 25px
-- Kolejność kolumn: Preview+Options → Options+Spec+Preview
-
-#### Fixed
-- Duplikaty `.window-specification` w CSS
-- Brakujący `.configurator-preview` w CSS
-- Responsive breakpoints dla wszystkich kolumn
+- Design inspiration: Tesla car configurator
+- Icons: Custom SVG
+- Fonts: Inter by Rasmus Andersson
 
 ---
 
-**Wersja:** 1.0.0  
-**Data:** 2025-01-XX  
-**Author:** Claude & Piotr  
-**License:** Proprietary - Skylon Timber & Glazing
+**Brand**: Sash Studio
+**Location**: London, UK
+**Target**: Young professionals, builders, architects
