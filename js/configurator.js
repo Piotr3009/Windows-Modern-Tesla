@@ -1,6 +1,6 @@
 // ============================================
 // SASH STUDIO - Configurator Controller
-// Main configurator logic and UI interactions
+// Tesla-Style Main configurator logic and UI interactions
 // ============================================
 
 const Configurator = {
@@ -40,11 +40,12 @@ const Configurator = {
 
   // Initialize configurator
   init() {
-    console.log('Initializing configurator...');
+    console.log('Initializing Tesla-style configurator...');
 
     // Wait for other modules to load
     setTimeout(() => {
       this.bindEvents();
+      this.updateSliderFill();
       this.updatePrice();
       this.updateSummary();
     }, 100);
@@ -84,23 +85,23 @@ const Configurator = {
       });
     });
 
-    // Glass options
-    document.querySelectorAll('.glass-option[data-glass]').forEach(option => {
+    // Glass type options (radio buttons)
+    document.querySelectorAll('.radio-option[data-glass]').forEach(option => {
       option.addEventListener('click', (e) => {
         const glass = e.currentTarget.dataset.glass;
         this.handleGlassChange(glass);
       });
     });
 
-    // Glass finish options
-    document.querySelectorAll('.glass-option[data-finish]').forEach(option => {
+    // Glass finish options (clear/frosted buttons)
+    document.querySelectorAll('.finish-option').forEach(option => {
       option.addEventListener('click', (e) => {
         const finish = e.currentTarget.dataset.finish;
         this.handleGlassFinishChange(finish);
       });
     });
 
-    // Color options
+    // Color options (button swatches)
     document.querySelectorAll('.color-option').forEach(option => {
       option.addEventListener('click', (e) => {
         const color = e.currentTarget.dataset.color;
@@ -108,16 +109,16 @@ const Configurator = {
       });
     });
 
-    // Hardware select
-    const hardwareSelect = document.getElementById('hardwareSelect');
-    if (hardwareSelect) {
-      hardwareSelect.addEventListener('change', (e) => {
-        this.handleHardwareChange(e.target.value);
+    // Hardware options (button swatches)
+    document.querySelectorAll('.hardware-option').forEach(option => {
+      option.addEventListener('click', (e) => {
+        const hardware = e.currentTarget.dataset.hardware;
+        this.handleHardwareChange(hardware);
       });
-    }
+    });
 
-    // Opening type options
-    document.querySelectorAll('.glass-option[data-opening]').forEach(option => {
+    // Opening type options (radio buttons)
+    document.querySelectorAll('.radio-option[data-opening]').forEach(option => {
       option.addEventListener('click', (e) => {
         const opening = e.currentTarget.dataset.opening;
         this.handleOpeningChange(opening);
@@ -154,7 +155,7 @@ const Configurator = {
     document.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
+        e.currentTarget.classList.add('active');
         // Could add view switching logic here
       });
     });
@@ -170,6 +171,22 @@ const Configurator = {
     if (loginBtn) {
       loginBtn.addEventListener('click', () => this.handleLogin());
     }
+  },
+
+  // Update slider fill (visual progress)
+  updateSliderFill() {
+    const sliders = document.querySelectorAll('.range-slider');
+    sliders.forEach(slider => {
+      const updateFill = () => {
+        const min = slider.min || 0;
+        const max = slider.max || 100;
+        const value = slider.value;
+        const percent = ((value - min) / (max - min)) * 100;
+        slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--border) ${percent}%, var(--border) 100%)`;
+      };
+      updateFill();
+      slider.addEventListener('input', updateFill);
+    });
   },
 
   // Handle size changes
@@ -235,9 +252,13 @@ const Configurator = {
   handleGlassChange(glass) {
     this.config.glassType = glass;
 
-    // Update UI
-    document.querySelectorAll('.glass-option[data-glass]').forEach(opt => {
+    // Update UI - handle radio options
+    document.querySelectorAll('.radio-option[data-glass]').forEach(opt => {
       opt.classList.toggle('active', opt.dataset.glass === glass);
+      const radio = opt.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = opt.dataset.glass === glass;
+      }
     });
 
     this.updatePrice();
@@ -247,8 +268,8 @@ const Configurator = {
   handleGlassFinishChange(finish) {
     this.config.glassFinish = finish;
 
-    // Update UI
-    document.querySelectorAll('.glass-option[data-finish]').forEach(opt => {
+    // Update UI - finish options
+    document.querySelectorAll('.finish-option').forEach(opt => {
       opt.classList.toggle('active', opt.dataset.finish === finish);
     });
 
@@ -264,7 +285,7 @@ const Configurator = {
   handleColorChange(color) {
     this.config.color = color;
 
-    // Update UI
+    // Update UI - color options
     document.querySelectorAll('.color-option').forEach(opt => {
       opt.classList.toggle('active', opt.dataset.color === color);
     });
@@ -289,6 +310,11 @@ const Configurator = {
   handleHardwareChange(hardware) {
     this.config.hardware = hardware;
 
+    // Update UI - hardware options
+    document.querySelectorAll('.hardware-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.hardware === hardware);
+    });
+
     // Update visualizer
     if (window.WindowVisualizer) {
       window.WindowVisualizer.setHardware(hardware);
@@ -299,9 +325,13 @@ const Configurator = {
   handleOpeningChange(opening) {
     this.config.opening = opening;
 
-    // Update UI
-    document.querySelectorAll('.glass-option[data-opening]').forEach(opt => {
+    // Update UI - handle radio options
+    document.querySelectorAll('.radio-option[data-opening]').forEach(opt => {
       opt.classList.toggle('active', opt.dataset.opening === opening);
+      const radio = opt.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.checked = opt.dataset.opening === opening;
+      }
     });
 
     this.updatePrice();
@@ -333,7 +363,7 @@ const Configurator = {
 
         setTimeout(() => {
           totalEl.classList.remove('updating');
-        }, 300);
+        }, 400);
       }
     }
 
@@ -348,12 +378,14 @@ const Configurator = {
 
     const formatted = window.PricingEngine.formatPrice(value);
     if (el.textContent !== formatted) {
-      el.style.transition = 'opacity 0.15s ease';
+      el.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
       el.style.opacity = '0.5';
+      el.style.transform = 'translateY(-2px)';
 
       setTimeout(() => {
         el.textContent = formatted;
         el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
       }, 150);
     }
   },
