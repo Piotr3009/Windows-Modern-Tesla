@@ -1,6 +1,6 @@
 // ============================================
 // SASH STUDIO - Configurator Controller
-// Tesla-Style Main configurator logic and UI interactions
+// Warm Elegant Theme - Configurator Logic
 // ============================================
 
 const Configurator = {
@@ -15,7 +15,7 @@ const Configurator = {
     color: 'white',
     hardware: 'brass',
     opening: 'both',
-    pas24: false,
+    pas24: true,
     laminated: false,
     keyLocks: false
   },
@@ -40,7 +40,7 @@ const Configurator = {
 
   // Initialize configurator
   init() {
-    console.log('Initializing Tesla-style configurator...');
+    console.log('Initializing Warm Elegant configurator...');
 
     // Wait for other modules to load
     setTimeout(() => {
@@ -48,6 +48,7 @@ const Configurator = {
       this.updateSliderFill();
       this.updatePrice();
       this.updateSummary();
+      this.updateDimensionDisplay();
     }, 100);
   },
 
@@ -77,9 +78,9 @@ const Configurator = {
       qtyPlus.addEventListener('click', () => this.handleQuantityChange(1));
     }
 
-    // Style options
-    document.querySelectorAll('.style-option').forEach(option => {
-      option.addEventListener('click', (e) => {
+    // Style options (glazing pattern buttons)
+    document.querySelectorAll('.style-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
         const style = e.currentTarget.dataset.style;
         this.handleStyleChange(style);
       });
@@ -93,49 +94,47 @@ const Configurator = {
       });
     });
 
-    // Glass finish options (clear/frosted buttons)
-    document.querySelectorAll('.finish-option').forEach(option => {
-      option.addEventListener('click', (e) => {
+    // Glass type radio inputs
+    document.querySelectorAll('input[name="glass"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        this.handleGlassChange(e.target.value);
+      });
+    });
+
+    // Glass finish options (buttons)
+    document.querySelectorAll('.finish-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
         const finish = e.currentTarget.dataset.finish;
         this.handleGlassFinishChange(finish);
       });
     });
 
-    // Color options (button swatches)
-    document.querySelectorAll('.color-option').forEach(option => {
-      option.addEventListener('click', (e) => {
+    // Color swatches
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', (e) => {
         const color = e.currentTarget.dataset.color;
         this.handleColorChange(color);
       });
     });
 
-    // Hardware options (button swatches)
-    document.querySelectorAll('.hardware-option').forEach(option => {
-      option.addEventListener('click', (e) => {
+    // Hardware options (buttons)
+    document.querySelectorAll('.hardware-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
         const hardware = e.currentTarget.dataset.hardware;
         this.handleHardwareChange(hardware);
       });
     });
 
     // Opening type options (radio buttons)
-    document.querySelectorAll('.radio-option[data-opening]').forEach(option => {
-      option.addEventListener('click', (e) => {
-        const opening = e.currentTarget.dataset.opening;
-        this.handleOpeningChange(opening);
+    document.querySelectorAll('input[name="opening"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        this.handleOpeningChange(e.target.value);
       });
     });
 
     // Security toggles
-    const pas24Toggle = document.getElementById('pas24Toggle');
     const laminatedToggle = document.getElementById('laminatedToggle');
     const keyLocksToggle = document.getElementById('keyLocksToggle');
-
-    if (pas24Toggle) {
-      pas24Toggle.addEventListener('change', (e) => {
-        this.config.pas24 = e.target.checked;
-        this.updatePrice();
-      });
-    }
 
     if (laminatedToggle) {
       laminatedToggle.addEventListener('change', (e) => {
@@ -151,15 +150,6 @@ const Configurator = {
       });
     }
 
-    // View controls
-    document.querySelectorAll('.view-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        // Could add view switching logic here
-      });
-    });
-
     // Get Quote button
     const quoteBtn = document.getElementById('getQuoteBtn');
     if (quoteBtn) {
@@ -173,20 +163,29 @@ const Configurator = {
     }
   },
 
-  // Update slider fill (visual progress with gold accent)
+  // Update slider fill (visual progress with green accent)
   updateSliderFill() {
-    const sliders = document.querySelectorAll('.range-slider');
+    const sliders = document.querySelectorAll('.slider');
     sliders.forEach(slider => {
       const updateFill = () => {
         const min = slider.min || 0;
         const max = slider.max || 100;
         const value = slider.value;
         const percent = ((value - min) / (max - min)) * 100;
-        slider.style.background = `linear-gradient(to right, #C9A227 0%, #C9A227 ${percent}%, #1A1A1D ${percent}%, #1A1A1D 100%)`;
+        // British Racing Green fill
+        slider.style.background = `linear-gradient(to right, #2D4739 0%, #2D4739 ${percent}%, #F5F2ED ${percent}%, #F5F2ED 100%)`;
       };
       updateFill();
       slider.addEventListener('input', updateFill);
     });
+  },
+
+  // Update dimension display in preview
+  updateDimensionDisplay() {
+    const display = document.getElementById('dimensionDisplay');
+    if (display) {
+      display.textContent = `${this.config.width} × ${this.config.height} mm`;
+    }
   },
 
   // Handle size changes
@@ -200,10 +199,8 @@ const Configurator = {
       displayEl.textContent = `${value}mm`;
     }
 
-    // Update visualizer
-    if (window.WindowVisualizer) {
-      window.WindowVisualizer.setDimensions(this.config.width, this.config.height);
-    }
+    // Update dimension display in preview
+    this.updateDimensionDisplay();
 
     this.updatePrice();
     this.updateSummary();
@@ -234,19 +231,13 @@ const Configurator = {
     this.config.style = style;
 
     // Update UI
-    document.querySelectorAll('.style-option').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.style === style);
+    document.querySelectorAll('.style-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.style === style);
     });
 
     // Update 3D window
     if (window.Window3D && window.Window3D.isInitialized) {
       window.Window3D.setStyle(style);
-    }
-
-    // Update SVG visualizer (fallback)
-    if (window.WindowVisualizer) {
-      window.WindowVisualizer.setStyle(style);
-      window.WindowVisualizer.animateChange();
     }
 
     this.updatePrice();
@@ -259,7 +250,6 @@ const Configurator = {
 
     // Update UI - handle radio options
     document.querySelectorAll('.radio-option[data-glass]').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.glass === glass);
       const radio = opt.querySelector('input[type="radio"]');
       if (radio) {
         radio.checked = opt.dataset.glass === glass;
@@ -273,19 +263,14 @@ const Configurator = {
   handleGlassFinishChange(finish) {
     this.config.glassFinish = finish;
 
-    // Update UI - finish options
-    document.querySelectorAll('.finish-option').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.finish === finish);
+    // Update UI - finish buttons
+    document.querySelectorAll('.finish-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.finish === finish);
     });
 
     // Update 3D window
     if (window.Window3D && window.Window3D.isInitialized) {
       window.Window3D.setGlassFinish(finish);
-    }
-
-    // Update SVG visualizer (fallback)
-    if (window.WindowVisualizer) {
-      window.WindowVisualizer.setGlassFinish(finish);
     }
 
     this.updatePrice();
@@ -295,9 +280,9 @@ const Configurator = {
   handleColorChange(color) {
     this.config.color = color;
 
-    // Update UI - color options
-    document.querySelectorAll('.color-option').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.color === color);
+    // Update UI - color swatches
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.classList.toggle('active', swatch.dataset.color === color);
     });
 
     // Update color name display
@@ -311,12 +296,6 @@ const Configurator = {
       window.Window3D.setFrameColor(color);
     }
 
-    // Update SVG visualizer (fallback)
-    if (window.WindowVisualizer) {
-      window.WindowVisualizer.setColor(color);
-      window.WindowVisualizer.animateChange();
-    }
-
     this.updatePrice();
     this.updateSummary();
   },
@@ -325,35 +304,20 @@ const Configurator = {
   handleHardwareChange(hardware) {
     this.config.hardware = hardware;
 
-    // Update UI - hardware options
-    document.querySelectorAll('.hardware-option').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.hardware === hardware);
+    // Update UI - hardware buttons
+    document.querySelectorAll('.hardware-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.hardware === hardware);
     });
 
     // Update 3D window
     if (window.Window3D && window.Window3D.isInitialized) {
       window.Window3D.setHardwareColor(hardware);
     }
-
-    // Update SVG visualizer (fallback)
-    if (window.WindowVisualizer) {
-      window.WindowVisualizer.setHardware(hardware);
-    }
   },
 
   // Handle opening type changes
   handleOpeningChange(opening) {
     this.config.opening = opening;
-
-    // Update UI - handle radio options
-    document.querySelectorAll('.radio-option[data-opening]').forEach(opt => {
-      opt.classList.toggle('active', opt.dataset.opening === opening);
-      const radio = opt.querySelector('input[type="radio"]');
-      if (radio) {
-        radio.checked = opt.dataset.opening === opening;
-      }
-    });
-
     this.updatePrice();
   },
 
@@ -412,11 +376,23 @@ const Configurator = {
 
   // Update configuration summary
   updateSummary() {
-    const summaryEl = document.getElementById('configSummary');
-    if (!summaryEl) return;
+    // Update spec dimensions
+    const specDimensions = document.getElementById('specDimensions');
+    if (specDimensions) {
+      specDimensions.textContent = `${this.config.width} × ${this.config.height}mm`;
+    }
 
-    const summary = `${this.config.width} x ${this.config.height}mm • ${this.styleNames[this.config.style]} • ${this.colorNames[this.config.color]}`;
-    summaryEl.textContent = summary;
+    // Update spec style
+    const specStyle = document.getElementById('specStyle');
+    if (specStyle) {
+      specStyle.textContent = this.styleNames[this.config.style];
+    }
+
+    // Update spec color
+    const specColor = document.getElementById('specColor');
+    if (specColor) {
+      specColor.textContent = this.colorNames[this.config.color];
+    }
   },
 
   // Handle Get Quote button
@@ -453,14 +429,16 @@ const Configurator = {
     const password = prompt('Enter your password:');
 
     if (email && password) {
-      window.signIn(email, password).then(result => {
-        if (result.error) {
-          alert('Login failed: ' + result.error.message);
-        } else {
-          alert('Logged in successfully!');
-          document.getElementById('loginBtn').textContent = 'Account';
-        }
-      });
+      if (window.signIn) {
+        window.signIn(email, password).then(result => {
+          if (result.error) {
+            alert('Login failed: ' + result.error.message);
+          } else {
+            alert('Logged in successfully!');
+            document.getElementById('loginBtn').textContent = 'Account';
+          }
+        });
+      }
     }
   },
 
@@ -477,12 +455,14 @@ const Configurator = {
       status: 'draft'
     };
 
-    const result = await window.saveEstimate(estimateData);
+    if (window.saveEstimate) {
+      const result = await window.saveEstimate(estimateData);
 
-    if (result.error) {
-      alert('Error saving estimate. Please try again.');
-    } else {
-      alert('Quote saved! Check your dashboard for details.');
+      if (result.error) {
+        alert('Error saving estimate. Please try again.');
+      } else {
+        alert('Quote saved! Check your dashboard for details.');
+      }
     }
   },
 

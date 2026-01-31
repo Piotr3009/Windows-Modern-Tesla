@@ -1,6 +1,6 @@
 // ============================================
-// SASH STUDIO - 3D Window Placeholder (Three.js)
-// Premium 3D visualization with realistic materials
+// SASH STUDIO - 3D Window (Three.js)
+// Warm Elegant Theme with Premium Materials
 // ============================================
 
 const Window3D = {
@@ -84,20 +84,14 @@ const Window3D = {
       this.controls.minAzimuthAngle = -Math.PI / 6;
       this.controls.maxAzimuthAngle = Math.PI / 6;
       this.controls.autoRotate = true;
-      this.controls.autoRotateSpeed = 0.5;
+      this.controls.autoRotateSpeed = 0.3;
     }
 
-    // Setup lighting
+    // Setup lighting (warm elegant theme)
     this.setupLighting();
 
     // Create the window model
     this.createWindowModel();
-
-    // Hide the SVG fallback
-    const svgPreview = document.getElementById('windowPreview');
-    if (svgPreview) {
-      svgPreview.style.display = 'none';
-    }
 
     // Start animation loop
     this.animate();
@@ -106,37 +100,37 @@ const Window3D = {
     window.addEventListener('resize', () => this.onResize(container));
 
     this.isInitialized = true;
-    console.log('Window3D: Initialized successfully');
+    console.log('Window3D: Initialized with Warm Elegant theme');
 
     return true;
   },
 
-  // Setup scene lighting
+  // Setup scene lighting - Warm Elegant Theme
   setupLighting() {
-    // Ambient light (soft overall illumination)
-    const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+    // Warm ambient light (creamy/beige tone)
+    const ambient = new THREE.AmbientLight(0xFFF5EB, 0.5);
     this.scene.add(ambient);
 
     // Key light (warm, from top-right-front)
-    const keyLight = new THREE.DirectionalLight(0xfff5e6, 1.0);
+    const keyLight = new THREE.DirectionalLight(0xFFFAF0, 1.0);
     keyLight.position.set(3, 4, 5);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
     this.scene.add(keyLight);
 
-    // Fill light (cool, from left)
-    const fillLight = new THREE.DirectionalLight(0xe6f0ff, 0.5);
+    // Fill light (warm, softer from left)
+    const fillLight = new THREE.DirectionalLight(0xF5F2ED, 0.4);
     fillLight.position.set(-3, 2, 3);
     this.scene.add(fillLight);
 
-    // Rim light (gold tinted, from behind for premium effect)
-    const rimLight = new THREE.DirectionalLight(0xC9A227, 0.3);
+    // Rim light (subtle British Racing Green for elegant accent)
+    const rimLight = new THREE.DirectionalLight(0x2D4739, 0.2);
     rimLight.position.set(0, 2, -5);
     this.scene.add(rimLight);
 
-    // Bottom fill (subtle, prevents dark shadows)
-    const bottomFill = new THREE.DirectionalLight(0xffffff, 0.2);
+    // Bottom fill (prevents harsh shadows)
+    const bottomFill = new THREE.DirectionalLight(0xFAF8F5, 0.2);
     bottomFill.position.set(0, -3, 2);
     this.scene.add(bottomFill);
   },
@@ -145,10 +139,10 @@ const Window3D = {
   createWindowModel() {
     this.windowGroup = new THREE.Group();
 
-    // Create materials
+    // Create materials with warm tones
     this.materials.frame = new THREE.MeshStandardMaterial({
       color: 0xFFFFFF,
-      roughness: 0.3,
+      roughness: 0.25,
       metalness: 0.0
     });
 
@@ -433,7 +427,7 @@ const Window3D = {
 
     // Subtle floating animation
     if (this.windowGroup) {
-      this.windowGroup.position.y = Math.sin(Date.now() * 0.001) * 0.02;
+      this.windowGroup.position.y = Math.sin(Date.now() * 0.001) * 0.015;
     }
 
     // Update controls
