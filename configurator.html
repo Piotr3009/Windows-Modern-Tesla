@@ -17,6 +17,10 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
   <!-- Styles -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/configurator.css">
@@ -27,10 +31,12 @@
   </style>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- Navigation - Dark Glass -->
   <nav class="navbar">
     <div class="navbar-inner">
-      <a href="index.html" class="navbar-logo">Sash<span>Studio</span></a>
+      <a href="index.html" class="navbar-logo">
+        <span class="logo-text">Sash</span><span class="logo-accent">Studio</span>
+      </a>
 
       <ul class="navbar-menu">
         <li><a href="configurator.html" class="active">Configure</a></li>
@@ -41,7 +47,7 @@
       </ul>
 
       <div class="navbar-actions">
-        <button class="btn btn-secondary" id="loginBtn">Sign In</button>
+        <button class="btn-ghost" id="loginBtn">Sign In</button>
       </div>
 
       <button class="mobile-menu-toggle" aria-label="Menu">
@@ -52,17 +58,17 @@
     </div>
   </nav>
 
-  <!-- Configurator Page - Tesla Style Layout -->
+  <!-- Configurator Page - Luxury Dark Layout -->
   <main class="configurator-page">
     <!-- Header -->
     <div class="configurator-header">
       <h1>Traditional Sash Window</h1>
-      <p>Configure your perfect window</p>
+      <p>Configure your perfect window <span class="text-gold">with precision</span></p>
     </div>
 
     <!-- Main Three-Column Layout -->
     <div class="configurator-layout">
-      <!-- LEFT COLUMN - Size, Style, Quantity -->
+      <!-- LEFT COLUMN - Size, Style, Quantity, Opening -->
       <aside class="options-column options-left">
         <!-- Size -->
         <div class="option-card" data-option="size">
@@ -227,11 +233,15 @@
         </div>
       </aside>
 
-      <!-- CENTER - Window Preview -->
+      <!-- CENTER - 3D Window Preview -->
       <section class="window-center">
         <div class="window-preview-container">
+          <!-- 3D Window Container -->
+          <div id="window3d-container"></div>
+
+          <!-- Fallback SVG Preview (hidden when 3D loads) -->
           <div class="window-preview" id="windowPreview">
-            <!-- Dynamic Isometric 3D SVG will be rendered here by visualizer.js -->
+            <!-- Dynamic SVG will be rendered here by visualizer.js as fallback -->
           </div>
 
           <!-- Dimension Labels -->
@@ -257,7 +267,7 @@
         </div>
       </section>
 
-      <!-- RIGHT COLUMN - Glass, Color, Hardware, Security -->
+      <!-- RIGHT COLUMN - Glass, Finish, Color, Hardware, Security -->
       <aside class="options-column options-right">
         <!-- Glass Type -->
         <div class="option-card" data-option="glass">
@@ -488,6 +498,7 @@
   <script src="js/supabase-config.js"></script>
   <script src="js/pricing.js"></script>
   <script src="js/visualizer.js"></script>
+  <script src="js/window3d.js"></script>
   <script src="js/configurator.js"></script>
   <script src="js/animations.js"></script>
 </body>

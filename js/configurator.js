@@ -173,7 +173,7 @@ const Configurator = {
     }
   },
 
-  // Update slider fill (visual progress)
+  // Update slider fill (visual progress with gold accent)
   updateSliderFill() {
     const sliders = document.querySelectorAll('.range-slider');
     sliders.forEach(slider => {
@@ -182,7 +182,7 @@ const Configurator = {
         const max = slider.max || 100;
         const value = slider.value;
         const percent = ((value - min) / (max - min)) * 100;
-        slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percent}%, var(--border) ${percent}%, var(--border) 100%)`;
+        slider.style.background = `linear-gradient(to right, #C9A227 0%, #C9A227 ${percent}%, #1A1A1D ${percent}%, #1A1A1D 100%)`;
       };
       updateFill();
       slider.addEventListener('input', updateFill);
@@ -238,7 +238,12 @@ const Configurator = {
       opt.classList.toggle('active', opt.dataset.style === style);
     });
 
-    // Update visualizer
+    // Update 3D window
+    if (window.Window3D && window.Window3D.isInitialized) {
+      window.Window3D.setStyle(style);
+    }
+
+    // Update SVG visualizer (fallback)
     if (window.WindowVisualizer) {
       window.WindowVisualizer.setStyle(style);
       window.WindowVisualizer.animateChange();
@@ -273,7 +278,12 @@ const Configurator = {
       opt.classList.toggle('active', opt.dataset.finish === finish);
     });
 
-    // Update visualizer
+    // Update 3D window
+    if (window.Window3D && window.Window3D.isInitialized) {
+      window.Window3D.setGlassFinish(finish);
+    }
+
+    // Update SVG visualizer (fallback)
     if (window.WindowVisualizer) {
       window.WindowVisualizer.setGlassFinish(finish);
     }
@@ -296,7 +306,12 @@ const Configurator = {
       colorNameEl.textContent = this.colorNames[color] || color;
     }
 
-    // Update visualizer
+    // Update 3D window
+    if (window.Window3D && window.Window3D.isInitialized) {
+      window.Window3D.setFrameColor(color);
+    }
+
+    // Update SVG visualizer (fallback)
     if (window.WindowVisualizer) {
       window.WindowVisualizer.setColor(color);
       window.WindowVisualizer.animateChange();
@@ -315,7 +330,12 @@ const Configurator = {
       opt.classList.toggle('active', opt.dataset.hardware === hardware);
     });
 
-    // Update visualizer
+    // Update 3D window
+    if (window.Window3D && window.Window3D.isInitialized) {
+      window.Window3D.setHardwareColor(hardware);
+    }
+
+    // Update SVG visualizer (fallback)
     if (window.WindowVisualizer) {
       window.WindowVisualizer.setHardware(hardware);
     }
